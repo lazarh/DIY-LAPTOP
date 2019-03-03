@@ -320,12 +320,13 @@ EOF
 #!/bin/sh
 set -ex
 export DEBIAN_FRONTEND=noninteractive
-locale-gen en_US.UTF-8
+#locale-gen en_US.UTF-8
 $ADDPPACMD
 apt-get -y update
-apt-get -y install dosfstools curl xz-utils iw rfkill wpasupplicant openssh-server alsa-utils $EXTRADEBS
-apt-get -y remove --purge ureadahead
+apt-get -y install dosfstools curl xz-utils iw rfkill wpasupplicant openssh-server alsa-utils locales $EXTRADEBS
+#apt-get -y remove --purge ureadahead
 apt-get -y update
+#locale-gen en_US.UTF-8
 adduser --gecos $DEBUSER --disabled-login $DEBUSER --uid 1000
 chown -R 1000:1000 /home/$DEBUSER
 dpkg -i /home/prebuilt/*
