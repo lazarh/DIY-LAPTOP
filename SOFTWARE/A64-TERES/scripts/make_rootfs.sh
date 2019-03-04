@@ -77,6 +77,9 @@ case $DISTRO in
 	xenial)
 		ROOTFS="http://cdimage.ubuntu.com/ubuntu-base/releases/16.04.2/release/ubuntu-base-16.04.2-base-arm64.tar.gz"
 		;;
+	bionic)
+		ROOTFS="http://cdimage.ubuntu.com/ubuntu-base/releases/18.04.2/release/ubuntu-base-18.04-base-arm64.tar.gz"
+		;;
 	sid|jessie)
 		ROOTFS="${DISTRO}-base-arm64.tar.gz"
 		METHOD="debootstrap"
@@ -282,10 +285,10 @@ EOF
 		rm -f "$DEST/etc/resolv.conf"
 		mv "$DEST/etc/resolv.conf.dist" "$DEST/etc/resolv.conf"
 		;;
-	xenial|sid|jessie)
+	xenial|bionic|sid|jessie)
 		rm "$DEST/etc/resolv.conf"
 		cp /etc/resolv.conf "$DEST/etc/resolv.conf"
-		if [ "$DISTRO" = "xenial" ]; then
+		if [ "xenial" = "$DISTRO" ] || [ "bionic" = "$DISTRO" ]; then
 			DEB=ubuntu
 			DEBUSER=olimex
 			DEBUSERPW=olimex
@@ -309,14 +312,16 @@ EOF
 			DEBUSER=olimex
 			DEBUSERPW=olimex
 			ADDPPACMD=""
-			EXTRADEBS="\
+			EXTRADEBS="sudo \
 				network-manager \
 				wireless-tools	\
-				device-tree-compiler \
-				dialog	\
-				rsync \
-				blueman \
-			"
+				gnupg \
+				wget \
+				debian-keyring \
+				debian-archive-keyring \
+				debian-ports-archive-keyring \
+				kde-full \
+				"
 		else
 			echo "Unknown DISTRO=$DISTRO"
 			exit 2
@@ -347,6 +352,9 @@ EOF
 		cat > "$DEST/etc/network/interfaces.d/eth0" <<EOF
 auto eth0
 iface eth0 inet dhcp
+EOF
+		cat > "$DEST/etc/resolv.conf" <<EOF
+nameserver 8.8.8.8
 EOF
 		cat > "$DEST/etc/hostname" <<EOF
 teres
