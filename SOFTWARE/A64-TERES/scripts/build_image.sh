@@ -35,7 +35,7 @@ fi
 SIMPLEIMAGE=$(readlink -f "$SIMPLEIMAGE")
 KERNELTAR=$(readlink -f "$KERNELTAR")
 
-SIZE=3650 # MiB
+SIZE=8650 # MiB
 DATE=$(date +%Y%m%d_%H%M%S_%Z)
 
 PWD=$(readlink -f .)
